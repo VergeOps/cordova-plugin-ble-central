@@ -442,6 +442,7 @@ public class Peripheral extends BluetoothGattCallback {
         commandCompleted();
     }
     
+    /*
     @Override
     public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
         super.onDescriptorRead(gatt, descriptor, status);
@@ -461,6 +462,7 @@ public class Peripheral extends BluetoothGattCallback {
 
         commandCompleted();
     }
+    */
 
     @Override
     public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
