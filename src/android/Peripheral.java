@@ -452,7 +452,7 @@ public class Peripheral extends BluetoothGattCallback {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     readCallback.success(new String(descriptor.getValue(), StandardCharsets.UTF_8));
                 } else {
-                    readCallback.error("Error reading " + descriptor.getUuid().toString() + " for characteristic " + decriptor.getCharacteristic().getUuid().toString() +  " status=" + status);
+                    readCallback.error("Error reading " + descriptor.getUuid().toString() + " for characteristic " + descriptor.getCharacteristic().getUuid().toString() +  " status=" + status);
                 }
 
                 readCallback = null;
