@@ -321,7 +321,11 @@ public class Peripheral extends BluetoothGattCallback {
                         for (BluetoothGattDescriptor descriptor: characteristic.getDescriptors()) {
                             JSONObject descriptorJSON = new JSONObject();
                             descriptorJSON.put("uuid", UUIDHelper.uuidToString(descriptor.getUuid()));
-                            descriptorJSON.put("valueString", "junk" + new String(descriptor.getValue(), StandardCharsets.UTF_8));
+                            /*String thisVal = "";
+                            if (descriptor.getValue() != null) {
+                            	thisVal = new String(descriptor.getValue(), StandardCharsets.UTF_8);
+                            }
+                            descriptorJSON.put("valueString", "junk" + thisVal);*/
                             descriptorJSON.put("value", descriptor.getValue()); // always blank
 
                             if (descriptor.getPermissions() > 0) {
