@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Peripheral wraps the BluetoothDevice and provides methods to convert to JSON.
@@ -320,6 +321,7 @@ public class Peripheral extends BluetoothGattCallback {
                         for (BluetoothGattDescriptor descriptor: characteristic.getDescriptors()) {
                             JSONObject descriptorJSON = new JSONObject();
                             descriptorJSON.put("uuid", UUIDHelper.uuidToString(descriptor.getUuid()));
+                            descriptorJSON.put("valueString", "junk" + new String(descriptor.getValue(), StandardCharsets.UTF_8));
                             descriptorJSON.put("value", descriptor.getValue()); // always blank
 
                             if (descriptor.getPermissions() > 0) {
@@ -431,6 +433,26 @@ public class Peripheral extends BluetoothGattCallback {
                     readCallback.success(characteristic.getValue());
                 } else {
                     readCallback.error("Error reading " + characteristic.getUuid() + " status=" + status);
+                }
+
+                readCallback = null;
+            }
+        }
+
+        commandCompleted();
+    }
+    
+    @Override
+    public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+        super.onDescriptorRead(gatt, descriptor, status);
+        LOG.d(TAG, "onDescriptorRead %s", descriptor);
+
+        synchronized(this) {
+            if (readCallback != null) {
+                if (status == BluetoothGatt.GATT_SUCCESS) {
+                    readCallback.success(new String(descriptor.getValue(), StandardCharsets.UTF_8));
+                } else {
+                    readCallback.error("Error reading " + descriptor.getUuid().toString() + " for characteristic " + decriptor.getCharacteristic().getUuid().toString() +  " status=" + status);
                 }
 
                 readCallback = null;
